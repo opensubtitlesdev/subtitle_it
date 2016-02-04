@@ -4,13 +4,18 @@ require 'subtitle_it/formats/yml'
 require 'subtitle_it/formats/rsb'
 require 'subtitle_it/formats/xml'
 require 'subtitle_it/formats/mpl'
+require 'subtitle_it/formats/webvtt'
+require 'subtitle_it/formats/dfxp'
+require 'logging'
 
 # http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
 # http://www.opensubtitles.org/addons/export_languages.php
 
 module SubtitleIt
   MOVIE_EXTS = %w(3g2 3gp 3gp2 3gpp 60d ajp asf asx avchd avi bik bix box cam dat divx dmf dv dvr-ms evo flc fli flic flv flx gvi gvp h264 m1v m2p m2ts m2v m4e m4v mjp mjpeg mjpg mkv moov mov movhd movie movx mp4 mpe mpeg mpg mpv mpv2 mxf nsv nut ogg ogm omf ps qt ram rm rmvb swf ts vfw vid video viv vivo vob vro wm wmv wmx wrap wvx wx x264 xvid)
-  SUB_EXTS = %w(srt sub smi txt ssa ass mpl xml yml rsb)
+  SUB_EXTS = %w(srt sub smi txt ssa ass mpl xml yml rsb webvtt dfxp)
+
+
 
   class Subtitle
     include Comparable
@@ -34,6 +39,8 @@ module SubtitleIt
         @rating            = @info['SubRating'].to_f
         @uploaded_at       = @info['SubAddDate'].to_s # TODO: convert to time object?
         @download_url      = @info['SubDownloadLink'].to_s
+        @logger = Logging.logger(STDOUT)
+        @logger.level = :debug
       end
       @fps = args[:fps] || 23.976
       return unless dump = args[:dump]
@@ -56,7 +63,7 @@ module SubtitleIt
 
       enc = CharlockHolmes::EncodingDetector.detect(dump)
       if enc[:encoding] != 'UTF-8'
-        puts "Converting `#{enc[:encoding]}` to `UTF-8`".yellow
+#        puts "Converting `#{enc[:encoding]}` to `UTF-8`"
         dump = CharlockHolmes::Converter.convert dump, enc[:encoding], 'UTF-8'
       end
       dump
@@ -64,11 +71,33 @@ module SubtitleIt
 
     def parse_dump(dump, format)
       fail unless SUB_EXTS.include?(format)
-      @raw = encode_dump(dump)
+      content = encode_dump(dump)
+      
+      @raw=fix_empty_lines(content)
       @format = format
       parse_lines!
     end
+    def fix_empty_lines(content)
+       arcontent=content.split(endline(content))
 
+
+        arcontent.each_with_index do |line,i|
+          pattern = (/\d{2}:\d{2}:\d{2},\d{3}?.*/)
+          if line.match(pattern)
+            puts "matching at line #{i}, content: >#{line}<"
+            if arcontent[i+1] && arcontent[i+1].blank?
+              puts "text content for line #{i} is empty, replace by space  => >#{arcontent[i+1]}<"
+             # arcontent[i+1]=":..:"
+              arcontent[i+1]="  "
+            end
+          end
+        end
+        newcontent=arcontent.join(endline(content))
+        return newcontent
+      
+    end
+    
+    
     def parse_lines!
       self.lines = send :"parse_#{@format}"
     end

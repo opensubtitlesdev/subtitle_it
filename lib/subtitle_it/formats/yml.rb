@@ -9,7 +9,7 @@ module Formats
     @title = header['title']
     @author = header['authors']
     @version = header['version']
-    @yaml['lines'].map { |l| Subline.new(l[0], l[1], l[2]) }
+    @yaml['lines'].map { |l| SubtitleIt::Subline.new(l[0], l[1], l[2]) }
   end
 
   def to_yml

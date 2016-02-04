@@ -13,7 +13,7 @@ module Formats
       line_data = line_data.at 0
       time_on, time_off, text = line_data
       time_on, time_off = [time_on.to_i, time_off.to_i].map { |t| t.to_i * 1000 }
-      i << Subline.new(time_on, time_off, text.chomp)
+      i << SubtitleIt::Subline.new(time_on, time_off, text.chomp)
     end
   end
 

@@ -1,5 +1,7 @@
 # SubtitleIt
-# XML TT Timed Text
+# DFXP TT Timed Text
+# Very much similar to regular xml !!
+#
 # http://www.w3.org/TR/2006/CR-ttaf1-dfxp-20061116/
 # http://livedocs.adobe.com/flash/9.0/main/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Parts&file=00000604.html
 #
@@ -24,7 +26,7 @@ require 'nokogiri'
 module Formats
   include PlatformEndLine
 
-  def parse_xml
+  def parse_dfxp
     final = []
     doc = Nokogiri::XML.parse(@raw)
     (doc / 'tt' / 'p').each do |line|
@@ -35,7 +37,7 @@ module Formats
     final
   end
 
-  def xml_lines
+  def dfxp_lines
     endl = endline(@raw)
     line_ary = []
     @lines.each do |l|
@@ -45,7 +47,7 @@ module Formats
     line_ary.join(endl)
   end
 
-  def to_xml
+  def to_dfxp
     endl = endline(@raw)
     out = <<XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -56,7 +58,7 @@ module Formats
   </head>
   <body>
     <div xml:lang="en">
-#{xml_lines}
+#{dfxp_lines}
     </div>
   </body>
 </tt>

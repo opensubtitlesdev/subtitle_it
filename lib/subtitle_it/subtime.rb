@@ -6,7 +6,7 @@ module SubtitleIt
     attr_accessor :hrs, :min, :sec, :ms
 
     def initialize(data)
-      fail if data.nil?
+      fail "failed initialize subtime" if data.nil?
       parse_data(data)
     end
 

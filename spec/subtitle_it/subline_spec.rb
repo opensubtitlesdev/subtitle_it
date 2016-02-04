@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Subline do
   before(:each) do
-    @sub =  Subline.new('02:20:02', '4', 'Astalavista, baby...')
+    @sub =  SubtitleIt::Subline.new('02:20:02', '4', 'Astalavista, baby...')
   end
 
   it "should initialize #{name}" do
@@ -23,7 +23,7 @@ end
 describe Subline, '.failures' do
   it 'should correct a timeline beforehe on time' do
     expect do
-      Subline.new('00:03:01', '00:02:03', 'Astalavista, baby...')
+      SubtitleIt::Subline.new('00:03:01', '00:02:03', 'Astalavista, baby...')
     end.not_to raise_error
   end
 end

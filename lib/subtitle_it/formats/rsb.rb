@@ -18,7 +18,7 @@ module Formats
     inn.inject([]) do |final, line|
       time_on, time_off = line.split('=>').map(&:strip)
       text = line.split('==')[1] # .strip
-      final << Subline.new(time_on, time_off, text ? text.strip : nil)
+      final << SubtitleIt::Subline.new(time_on, time_off, text ? text.strip : nil)
     end
   end
 

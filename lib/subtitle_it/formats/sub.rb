@@ -30,7 +30,7 @@ module Formats
       time_on, time_off = [time_on.to_i, time_off.to_i].map do |t|
         (t.to_i / @fps * 1000 / ratio).to_i
       end
-      i << Subline.new(time_on, time_off, text ? text.chomp : nil)
+      i << SubtitleIt::Subline.new(time_on, time_off, text ? text.chomp : nil)
     end
   end
 
