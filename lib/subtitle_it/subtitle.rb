@@ -3,9 +3,12 @@ require 'subtitle_it/formats/sub'
 require 'subtitle_it/formats/yml'
 require 'subtitle_it/formats/rsb'
 require 'subtitle_it/formats/xml'
+require 'subtitle_it/formats/txt'
 require 'subtitle_it/formats/mpl'
 require 'subtitle_it/formats/webvtt'
 require 'subtitle_it/formats/dfxp'
+require 'active_support'
+require 'active_support/core_ext/object/blank'
 require 'logging'
 
 # http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
@@ -13,7 +16,7 @@ require 'logging'
 
 module SubtitleIt
   MOVIE_EXTS = %w(3g2 3gp 3gp2 3gpp 60d ajp asf asx avchd avi bik bix box cam dat divx dmf dv dvr-ms evo flc fli flic flv flx gvi gvp h264 m1v m2p m2ts m2v m4e m4v mjp mjpeg mjpg mkv moov mov movhd movie movx mp4 mpe mpeg mpg mpv mpv2 mxf nsv nut ogg ogm omf ps qt ram rm rmvb swf ts vfw vid video viv vivo vob vro wm wmv wmx wrap wvx wx x264 xvid)
-  SUB_EXTS = %w(srt sub smi txt ssa ass mpl xml yml rsb webvtt dfxp)
+  SUB_EXTS = %w(srt sub smi txt ssa ass mpl xml yml rsb webvtt dfxp txt)
 
 
 
@@ -73,26 +76,51 @@ module SubtitleIt
       fail unless SUB_EXTS.include?(format)
       content = encode_dump(dump)
       
-      @raw=fix_empty_lines(content)
+    #  @raw=fix_empty_lines(content)
+      @raw=content
       @format = format
       parse_lines!
     end
     def fix_empty_lines(content)
-       arcontent=content.split(endline(content))
 
+       el=endline(content)
+       
 
+       content.strip!
+                   
+       arcontent=content.split(el)
+      
+       # remove empty lines at bottom of file
+     #  arcontent.reverse!
+     #  arcontent.each_with_index do |ar,i|
+     #    if ar.blank? || ar=="\n"
+     #      arcontent.delete_at(i)
+     #    else
+     #      break
+     #    end
+     #   end
+     #   arcontent.reverse!                   
+        
         arcontent.each_with_index do |line,i|
-          pattern = (/\d{2}:\d{2}:\d{2},\d{3}?.*/)
-          if line.match(pattern)
-            puts "matching at line #{i}, content: >#{line}<"
-            if arcontent[i+1] && arcontent[i+1].blank?
-              puts "text content for line #{i} is empty, replace by space  => >#{arcontent[i+1]}<"
-             # arcontent[i+1]=":..:"
-              arcontent[i+1]="  "
+      
+          
+            pattern = (/\d{2}:\d{2}:\d{2},\d{3}?.*/)
+            if line.match(pattern)
+            #  puts "matching at line #{i}, content: >#{line}<"
+              if arcontent[i+1] && arcontent[i+1].blank?
+              #  puts "text content for line #{i} is empty, replace by space  => >#{arcontent[i+1]}<"
+               # arcontent[i+1]=":..:"
+                arcontent[i+1]="   "
+              end
             end
-          end
+      
         end
         newcontent=arcontent.join(endline(content))
+        
+       # newcontent.gsub!(/[\r\n][\r\n][\r\n]+/, "\r\n\r\n")   
+#        puts newcontent
+
+        
         return newcontent
       
     end

@@ -24,8 +24,10 @@ Gem::Specification.new do |s|
   s.executables  = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   # s.extra_rdoc_files = s.files.grep(%r{^(rdoc)/})
 
-  s.add_dependency 'colorize'
+  #s.add_dependency 'colorize'
+  s.add_dependency 'activesupport'
   s.add_dependency 'nokogiri'
   s.add_dependency 'charlock_holmes'
   s.add_dependency 'logging'  
+  
 end

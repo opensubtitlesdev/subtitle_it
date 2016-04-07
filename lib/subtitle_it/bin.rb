@@ -23,7 +23,7 @@ module SubtitleIt
         return
       end
       unless first
-        puts "Found #{res.size.to_s.yellow} result#{'s' if res.size > 1}:\n"
+        puts "Found #{res.size.to_s} result#{'s' if res.size > 1}:\n"
         res.each_with_index { |r, i| puts print_option(r.info, i) }
         puts 'You can choose multiple ones separated with spaces: 1 3 5 '
         puts 'Or a range separated with a hifen: 3-5'
@@ -53,10 +53,10 @@ module SubtitleIt
 
     def print_option(r, index)
       date = Date.parse(r['SubAddDate'])
-      "  #{(index + 1).to_s.rjust(2, ' ').yellow}."\
-      " #{r['LanguageName'][0, 9].rjust(10, ' ').green}"\
-      " | #{r['SubFormat'].upcase.blue} | #{r['MovieName'][0, 20].cyan}"\
-      " / #{r['MovieYear'].cyan} | #{r['SubRating'].yellow}"\
+      "  #{(index + 1).to_s.rjust(2, ' ')}."\
+      " #{r['LanguageName'][0, 9].rjust(10, ' ')}"\
+      " | #{r['SubFormat'].upcase} | #{r['MovieName'][0, 20]}"\
+      " / #{r['MovieYear']} | #{r['SubRating']}"\
       " | FPS #{r['MovieFPS']} | #{r['SubSumCD']} CDs | #{date}"
     end
 
@@ -84,7 +84,7 @@ module SubtitleIt
 
       # TODO: generate_rsb
       unless File.exist?(argv[0])
-        puts "Can't find '#{argv.join}'".yellow
+        puts "Can't find '#{argv.join}'"
         exit 1
       end
 
@@ -125,10 +125,10 @@ module SubtitleIt
 
     def self.write_out(filename, dump)
       if File.exist?(filename) && !@force
-        puts "File exist: #{filename}".red
+        puts "File exist: #{filename}"
       else
         File.open(filename, 'w') { |f| f.write(dump) }
-        puts "Done: #{filename}".yellow
+        puts "Done: #{filename}"
       end
     end
   end

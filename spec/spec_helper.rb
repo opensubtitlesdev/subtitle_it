@@ -1,4 +1,4 @@
-require 'colorize'
+#require 'colorize'
 require 'rspec'
 require 'rspec/mocks'
 
@@ -13,6 +13,23 @@ module SubFixtures
 
   def srt_fixture
     File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/godfather.srt'))
+  end
+  # has an empty string in 5th subtitle
+  def bugged_srt_fixture
+    File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/godfather_bugged.srt'))
+  end
+  
+  def bugged_empty_lines
+      File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/bug_empty_lines.srt'))
+  end
+  def problems_timestamps
+     File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/problems_timestamps.srt'))
+  end
+  def problems_lines
+    File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/problems_lines.srt'))
+  end
+  def wtf_srt
+     File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/wtf.srt'))
   end
 
   def yml_fixture
