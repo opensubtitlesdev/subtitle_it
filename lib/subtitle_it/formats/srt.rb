@@ -17,13 +17,13 @@ module Formats
   end
 
   def parse_srt
-    @logger = Logging.logger("srt_logger.log")
-    @logger.level = :debug
+   # @logger = Logging.logger("srt_logger.log")
+   # @logger.level = :debug
     # @logger.add_appenders \
     #     Logging.appenders.file('srt_logger.log')
-    @logger.debug("DEBUG parse_srt 00.  @raw:\n#{@raw}\n.......................")      
+   # @logger.debug("DEBUG parse_srt 00.  @raw:\n#{@raw}\n.......................")      
   #  @raw=fix_srt_empty_lines(@raw)
-    @logger.debug("DEBUG parse_srt 01.  formatted:\n#{@raw}\n.......................")          
+  #  @logger.debug("DEBUG parse_srt 01.  formatted:\n#{@raw}\n.......................")          
     @raw.split(endl * 2).inject([]) do |final, line|
 
      # @logger.debug("1. parse_srt line:#{line.inspect}")      
