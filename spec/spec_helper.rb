@@ -19,6 +19,27 @@ module SubFixtures
     File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/godfather_bugged.srt'))
   end
   
+  def bug_parsing
+    File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/bug_parsing.srt'))    
+  end
+  def should_parse
+     File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/should_parse.srt'))    
+   end
+  def not_sure_if_problem
+    File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/not_sure_if_problem.srt'))    
+  end
+  
+  def problem_many_empty_lines
+    File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/problem_many_empty_lines.srt'))    
+  end
+  def missing_first_stamp
+    File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/missing_first_stamp.srt'))    
+  end
+  def parse_arabic
+     File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/parse_arabic.srt'))    
+  end
+  
+  
   def bugged_empty_lines
       File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/bug_empty_lines.srt'))
   end

@@ -30,6 +30,8 @@ module SubtitleIt
     def initialize(args = {})
       # Looks like opensubtitle is the only provider around..
       # If a second one comes need big refactor...
+      @logger = Logging.logger("srt_logger.log")
+      @logger.level = :debug
       if @info = args[:info]
         # @osdb_info         = info
         @osdb_id           = @info['IDSubtitleFile'].to_s
@@ -42,8 +44,8 @@ module SubtitleIt
         @rating            = @info['SubRating'].to_f
         @uploaded_at       = @info['SubAddDate'].to_s # TODO: convert to time object?
         @download_url      = @info['SubDownloadLink'].to_s
-        @logger = Logging.logger(STDOUT)
-        @logger.level = :debug
+        #@logger = Logging.logger(STDOUT)
+   
       end
       @fps = args[:fps] || 23.976
       return unless dump = args[:dump]
@@ -57,6 +59,72 @@ module SubtitleIt
     def <=>(other)
       rating <=> other.rating
     end
+   # def fix_marshal
+   #     singleton_methods.each { |m| singleton_class.send(:remove_method, m) }
+   #     singleton_class.class_eval do
+   #       instance_variables.each { |v| remove_instance_variable v }
+   #     end
+   #   end
+    
+    def marshal_dump(*args)
+        # singleton_methods.each { |m| singleton_class.send(:remove_method, m) }
+        #  singleton_class.class_eval do
+        #    instance_variables.each { |v| remove_instance_variable v }
+        #  end
+       saved_logger = @logger
+       @logger = nil
+       #
+       # Save the marshalling method in an alias and then delete it so
+       # there are no recursion worries.
+       #
+       self.class.send(:alias_method, :marshal_dump_foo, :marshal_dump)
+       self.class.send(:remove_method, :marshal_dump)
+       #
+       # Now we should get a *real* marshalling of us and all of our bits,
+       # friends, and relations.
+       #
+       marshalled = Marshal.dump(self)
+       @logger = saved_logger || create_logger
+       #
+       # Put the original #marshal_dump (that's us!) back so we are as
+       # we were before.
+       #
+       self.class.send(:alias_method, :marshal_dump, :marshal_dump_foo)
+       self.class.send(:remove_method, :marshal_dump_foo)
+       #
+       # Now that we're ourselves (ourself?) again, *now* return the
+       # result of dumping me/us.
+       #
+       return marshalled
+     end
+     
+     def marshal_load(map_p)
+        #
+        # If we get a string, it's marshalled data.  Otherwise it's something
+        # that Marshal#load has already frobbed.  Load it it we have to.
+        #
+        map = map_p.kind_of?(String) ? Marshal.load(map_p) : map_p
+        #
+        # For each instance variable in the newly-created Foo
+        # object, copy it into ourself.
+        #
+        map.instance_variables.each do |ivar|
+          self.instance_variable_set(ivar.to_sym,
+                                     map.instance_variable_get(ivar.to_sym))
+        end
+        #
+        # Make sure we point to ourself as the parent of this branch of
+        # the Foo family.
+        #
+        @parent = self
+        #
+        # Make sure that all the restored children point to us, as well, rather
+        # than the restored Foo object.
+        #
+        #@children.each { |o| o.parent = self }
+        create_logger
+        return self
+      end
 
     private
 
@@ -73,11 +141,12 @@ module SubtitleIt
     end
 
     def parse_dump(dump, format)
+      @logger.debug("\n...........\nParsing #{@filename}")
       fail unless SUB_EXTS.include?(format)
       content = encode_dump(dump)
       
-    #  @raw=fix_empty_lines(content)
-      @raw=content
+      @raw=fix_empty_lines(content)
+    #  @raw=content
       @format = format
       parse_lines!
     end
@@ -86,9 +155,17 @@ module SubtitleIt
        el=endline(content)
        
 
-       content.strip!
-                   
-       arcontent=content.split(el)
+       #remove empty lines at start of file
+       arcontent=content.split(el)       
+       arcontent.each_with_index do |ar,i|
+         if ar.match(/^[\xef\xbb\xbf\r\n\s]*$/u)
+           arcontent.delete_at(i)
+         else
+           break
+         end
+       end
+       
+       content=arcontent.join(endline(content))
       
        # remove empty lines at bottom of file
      #  arcontent.reverse!
@@ -100,27 +177,30 @@ module SubtitleIt
      #    end
      #   end
      #   arcontent.reverse!                   
-        
+        arcontent=content.split(el)     
         arcontent.each_with_index do |line,i|
-      
           
             pattern = (/\d{2}:\d{2}:\d{2},\d{3}?.*/)
             if line.match(pattern)
-            #  puts "matching at line #{i}, content: >#{line}<"
-              if arcontent[i+1] && arcontent[i+1].blank?
+              #puts "matching at line #{i}, content: >#{line}<"
+              #puts "|" + arcontent[i] + "|"
+
+              (1..12).to_a.each do |ii|
+                idx=ii+i
+                if arcontent[idx] && arcontent[idx].blank?
               #  puts "text content for line #{i} is empty, replace by space  => >#{arcontent[i+1]}<"
-               # arcontent[i+1]=":..:"
-                arcontent[i+1]="   "
+                  arcontent.delete_at(idx)
+                end
               end
             end
-      
         end
         newcontent=arcontent.join(endline(content))
+#        newcontent.gsub!(/^(\d+)\s*(\d{2}:\d{2}:\d{2},\d{3}?)/m, "\r\n\\1\r\n\\2")           
+        newcontent.gsub!(/^(\d+)\s*(\d{2}:\d{2}:\d{2},\d{3}?)/mu, el + "\\1" + el + "\\2")  
         
-       # newcontent.gsub!(/[\r\n][\r\n][\r\n]+/, "\r\n\r\n")   
-#        puts newcontent
-
-        
+                 
+        newcontent.strip!
+#        puts "|" + newcontent + "|"
         return newcontent
       
     end

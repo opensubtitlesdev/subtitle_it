@@ -11,7 +11,9 @@ module SubtitleIt
     # S
     # text lines should be separated by |
     def initialize(time_on, time_off, text)
-      @logger = Logging.logger(STDOUT)
+#      @logger = Logging.logger(STDOUT)
+      @logger = Logging.logger("srt_logger.log")
+      
       @logger.level = :debug
      
       unless time_on.nil? || time_off.nil?

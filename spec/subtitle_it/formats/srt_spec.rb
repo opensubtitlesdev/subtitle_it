@@ -54,11 +54,104 @@ describe Formats, '.srt' do
       # @raw_content=bugged_empty_lines.read.split("\n")
       end
       it 'should parse the file with empty lines' do
+#                puts "some ugly debug:#{@empty_lines.lines.inspect}"
          expect(@empty_lines.lines).to be_instance_of(Array)
        end
        it 'should fix problem with empty lines at the end of a file' do
-          expect(@empty_lines.lines.length).to eq(1202)
+          expect(@empty_lines.lines.length).to eq(10)
        end
+  end
+   describe 'not sure if problem' do
+       before(:each) do
+         @not_sure_if_problem=Subtitle.new(dump: not_sure_if_problem, format: 'srt')
+        # @raw_content=bugged_empty_lines.read.split("\n")
+        end
+        it 'should parse the file not sure' do
+  #                puts "some ugly debug:#{@empty_lines.lines.inspect}"
+           expect(@not_sure_if_problem.lines).to be_instance_of(Array)
+         end
+         it 'should fix problem with file not sure' do
+            expect(@not_sure_if_problem.lines.length).to eq(778)
+         end
+    end
+    
+    
+     describe 'should parse' do
+         before(:each) do
+           @should_parse=Subtitle.new(dump: should_parse, format: 'srt')
+          # @raw_content=bugged_empty_lines.read.split("\n")
+          end
+          it 'should parse the should_parse' do
+    #                puts "some ugly debug:#{@empty_lines.lines.inspect}"
+             expect(@should_parse.lines).to be_instance_of(Array)
+           end
+          #it 'should fix problem with should_parse' do
+          #   expect(@should_parse.lines.length).to eq(778)
+          #end
+      end
+     describe 'parse arabic problem' do
+         before(:each) do
+           @parse_arabic=Subtitle.new(dump: parse_arabic, format: 'srt')
+          # @raw_content=bugged_empty_lines.read.split("\n")
+          end
+          it 'should parse the parse_arabic' do
+    #                puts "some ugly debug:#{@empty_lines.lines.inspect}"
+             expect(@parse_arabic.lines).to be_instance_of(Array)
+           end
+           it 'should fix problem with parse_arabic' do
+             puts @parse_arabic.to_webvtt
+              expect(@parse_arabic.lines.length).to eq(27)
+           end
+      end
+    
+  
+
+    describe 'problem many empty lines' do
+        before(:each) do
+          @problem_many_empty_lines=Subtitle.new(dump: problem_many_empty_lines, format: 'srt')
+         # @raw_content=bugged_empty_lines.read.split("\n")
+         end
+         it 'should parse the file with many empty lines' do
+   #                puts "some ugly debug:#{@empty_lines.lines.inspect}"
+            expect(@problem_many_empty_lines.lines).to be_instance_of(Array)
+          end
+          it 'should fix problem with many empty lines' do
+             expect(@problem_many_empty_lines.lines.length).to eq(7)
+          end
+     end
+  
+  
+       describe 'problem missing first ts' do
+           before(:each) do
+             @missing_first_stamp=Subtitle.new(dump: missing_first_stamp, format: 'srt')
+            # @raw_content=bugged_empty_lines.read.split("\n")
+            end
+            it 'should parse the file with missing first ts' do
+      #                puts "some ugly debug:#{@empty_lines.lines.inspect}"
+               expect(@missing_first_stamp.lines).to be_instance_of(Array)
+             end
+             it 'should parse the file with missing first ts and count lines correctly' do
+                expect(@missing_first_stamp.lines.length).to eq(721)
+             end
+        end
+
+
+  
+  
+  
+  
+  describe "bug parsing first line empty" do
+     before(:each) do
+       @bug_parsing=Subtitle.new(dump: bug_parsing, format: 'srt')
+      end
+      it 'should parse the file first line empty' do
+#                puts "some ugly debug:#{@empty_lines.lines.inspect}"
+         expect(@bug_parsing.lines).to be_instance_of(Array)
+       end
+       it 'should parse the file first line empty and get the correct number of lines' do
+          expect(@bug_parsing.lines.length).to eq(4)
+       end
+    
   end
   
   describe "bugged multiple empty lines at bottom of file" do
@@ -86,8 +179,32 @@ describe Formats, '.srt' do
        # @raw_content=bugged_empty_lines.read.split("\n")
      end
      it 'should parse the wtf file' do
+       puts "some ugly debug:#{@wtf_srt.to_srt}"
         expect(@wtf_srt.lines).to be_instance_of(Array)
      end
+     it 'should parse the file wtf and get the correct number of lines' do
+         expect(@wtf_srt.lines.length).to eq(4)
+         puts @wtf_srt.to_webvtt
+      end
+   # it "should remove empty lines" do
+   #   expect(@wtf_srt.to_srt).to eql("1
+   #   00:00:40,700 --> 00:00:44,575
+   #   Traducción por:
+   #
+   #   2
+   #   00:00:49,501 --> 00:00:54,568
+   #   THIS IS PROBLEM LINE
+   #   BECAOUSE OF THIS PROBLEM
+   #
+   #   3
+   #   00:00:56,371 --> 00:00:59,695
+   #   na4na@hotmail.com
+   #
+   #   4
+   #   00:01:49,501 --> 00:01:54,568
+   #   THIS IS PROBLEM LINE
+   #   BECAOUSE OF THIS PROBLEM")
+   # end
  end
   
   
