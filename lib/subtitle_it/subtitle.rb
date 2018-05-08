@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'subtitle_it/formats/srt'
 require 'subtitle_it/formats/sub'
 require 'subtitle_it/formats/yml'
@@ -47,6 +48,7 @@ module SubtitleIt
         #@logger = Logging.logger(STDOUT)
    
       end
+      @filname=args[:filename]
       @fps = args[:fps] || 23.976
       return unless dump = args[:dump]
       parse_dump(args[:dump], args[:format])
@@ -133,10 +135,12 @@ module SubtitleIt
       dump = dump.read unless dump.kind_of?(String)
 
       enc = CharlockHolmes::EncodingDetector.detect(dump)
-      if enc[:encoding] != 'UTF-8'
+      @logger.debug("\n...........\encode_dump #{enc}")
+    
+    #  if enc[:encoding] != 'UTF-8'
 #        puts "Converting `#{enc[:encoding]}` to `UTF-8`"
         dump = CharlockHolmes::Converter.convert dump, enc[:encoding], 'UTF-8'
-      end
+  #    end
       dump
     end
 
