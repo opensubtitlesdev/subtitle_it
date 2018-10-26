@@ -17,7 +17,7 @@ module Formats
   end
 
   def parse_srt
-    @logger = Logging.logger("srt_logger.log")
+    @logger = Logging.logger("log/srt_logger.log")
     @logger.level = :debug
     # @logger.add_appenders \
     #     Logging.appenders.file('srt_logger.log')
@@ -27,7 +27,7 @@ module Formats
     @raw.split(endl * 2).inject([]) do |final, line|
 
 
-      @logger.debug("1. parse_srt line:#{line.inspect}")      
+    #  @logger.debug("1. parse_srt line:#{line.inspect}")      
       line = line.split(endl)
       line.delete_at(0)
 #      @logger.debug("2. parse_srt line:#{line.inspect}")      
@@ -37,11 +37,11 @@ module Formats
 
         text = line.join('|')
         # if text.nil?        
-          @logger.debug("2. parse_srt time_on:#{time_on} time_off:#{time_off} text:#{text}")              
+         # @logger.debug("2. parse_srt time_on:#{time_on} time_off:#{time_off} text:#{text}")              
         # end
         final << SubtitleIt::Subline.new(time_on, time_off, text) unless final.nil?
       else
-        @logger.debug("SHIT IS HERE parse_srt line:#{line.inspect}")      
+      #  @logger.debug("SHIT IS HERE parse_srt line:#{line.inspect}")      
       end
     end
   end

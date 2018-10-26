@@ -31,7 +31,7 @@ module SubtitleIt
     def initialize(args = {})
       # Looks like opensubtitle is the only provider around..
       # If a second one comes need big refactor...
-      @logger = Logging.logger("srt_logger.log")
+      @logger = Logging.logger("log/srt_logger.log")
       @logger.level = :debug
       if @info = args[:info]
         # @osdb_info         = info

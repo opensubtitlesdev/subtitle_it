@@ -12,7 +12,7 @@ module SubtitleIt
     # text lines should be separated by |
     def initialize(time_on, time_off, text)
 #      @logger = Logging.logger(STDOUT)
-      @logger = Logging.logger("srt_logger.log")
+      @logger = Logging.logger("log/srt_logger.log")
       
       @logger.level = :debug
      
@@ -23,7 +23,7 @@ module SubtitleIt
         @time_off += @time_on if @time_off < @time_on
         @text = text
       else
-        @logger.debug("Error Subline with time_on:#{time_on} - time_off:#{time_off} text: #{text}")
+      #  @logger.debug("Error Subline with time_on:#{time_on} - time_off:#{time_off} text: #{text}")
         @text=nil
       end
     end
