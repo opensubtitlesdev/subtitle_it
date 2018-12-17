@@ -12,6 +12,7 @@ require 'active_support'
 require 'active_support/core_ext/object/blank'
 require 'logging'
 
+
 # http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
 # http://www.opensubtitles.org/addons/export_languages.php
 
@@ -22,6 +23,7 @@ module SubtitleIt
 
 
   class Subtitle
+
     include Comparable
     include Formats
     attr_reader :id, :raw, :format, :lines, :style, :info, :filename, :rating, :language, :user, :release_name,

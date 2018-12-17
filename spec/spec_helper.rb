@@ -14,6 +14,12 @@ module SubFixtures
   def srt_fixture
     File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/godfather.srt'))
   end
+  
+  def srt_tabs_fixture
+    File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/srt_tabs.srt'))
+  end
+  
+  
   # has an empty string in 5th subtitle
   def bugged_srt_fixture
     File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/godfather_bugged.srt'))

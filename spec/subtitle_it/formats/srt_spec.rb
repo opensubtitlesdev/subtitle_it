@@ -120,6 +120,27 @@ describe Formats, '.srt' do
           end
      end
   
+      describe 'problem srt tabs' do
+          before(:each) do
+            @srt_tabs_fixture=Subtitle.new(dump: srt_tabs_fixture, format: 'srt')
+           # @raw_content=bugged_empty_lines.read.split("\n")
+           end
+           it 'should parse the file with weird tabulations lines' do
+     #                puts "some ugly debug:#{@empty_lines.lines.inspect}"
+              expect(@srt_tabs_fixture.lines).to be_instance_of(Array)
+            end
+            it 'should fix problem withweird tabulations ' do
+               expect(@srt_tabs_fixture.lines.length).to eq(994)
+               
+               puts @srt_tabs_fixture.to_srt
+            end
+            
+            
+       end
+  
+  
+  
+  
   
        describe 'problem missing first ts' do
            before(:each) do
