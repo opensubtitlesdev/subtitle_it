@@ -34,7 +34,7 @@ module SubtitleIt
       # Looks like opensubtitle is the only provider around..
       # If a second one comes need big refactor...
       @logger = Logging.logger("log/srt_logger.log")
-      @logger.level = :info
+      @logger.level = :debug
       if @info = args[:info]
         # @osdb_info         = info
         @osdb_id           = @info['IDSubtitleFile'].to_s
@@ -134,10 +134,15 @@ module SubtitleIt
 
     # Force subtitles to be UTF-8
     def encode_dump(dump)
+  
+      
       dump = dump.read unless dump.kind_of?(String)
+    
+      
 
+      
       enc = CharlockHolmes::EncodingDetector.detect(dump)
-      @logger.debug("\n...........\encode_dump #{enc}")
+      @logger.debug("\n...........\n encode_dump #{enc}")
     
     #  if enc[:encoding] != 'UTF-8'
 #        puts "Converting `#{enc[:encoding]}` to `UTF-8`"
@@ -145,12 +150,19 @@ module SubtitleIt
   #    end
       dump
     end
+    def dos2unix(input)
+      input.each_byte.map { |c| c.chr unless c == 13 }.join
+    end
 
     def parse_dump(dump, format)
       @logger.debug("\n...........\nParsing #{@filename}")
       fail unless SUB_EXTS.include?(format)
+      dump = dos2unix dump
       content = encode_dump(dump)
+
+      content=content.sub("\xEF\xBB\xBF".force_encoding("UTF-8"), '')      
       
+       @logger.debug("\n...........\n content\n#{content}")
       @raw=fix_empty_lines(content)
     #  @raw=content
       @format = format

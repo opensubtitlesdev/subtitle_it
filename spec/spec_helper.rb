@@ -16,7 +16,8 @@ module SubFixtures
   end
   
   def srt_tabs_fixture
-    File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/srt_tabs.srt'))
+#    File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/srt_tabs.srt'))
+      File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/1954457660'))
   end
   
   
