@@ -49,11 +49,13 @@ module Formats
   def to_srt
     out = []
     @lines.each_with_index do |l, i|
-      out << "#{i + 1}"
-      out << '%s --> %s' % [l.time_on.to_s(','), l.time_off.to_s(',')]
-     # out << '%s --> %s' % [l.time_on.to_s, l.time_off.to_s]
-      #out << '%s --> %s' % [l.time_on.to_s, l.time_off.to_s]
-      out << (l.text ? l.text.gsub('|', endl) : ' ') + endl
+      unless l.time_on.nil? && l.time_off.nil?
+        out << "#{i + 1}"
+        out << '%s --> %s' % [l.time_on.to_s(','), l.time_off.to_s(',')]
+        # out << '%s --> %s' % [l.time_on.to_s, l.time_off.to_s]
+        #out << '%s --> %s' % [l.time_on.to_s, l.time_off.to_s]
+        out << (l.text ? l.text.gsub('|', endl) : ' ') + endl
+      end
     end
     out.join(endl)
   end
