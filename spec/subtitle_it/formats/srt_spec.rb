@@ -131,11 +131,29 @@ describe Formats, '.srt' do
             end
             it 'should fix problem withweird tabulations ' do
                expect(@srt_tabs_fixture.lines.length).to eq(994)
-               
+
                puts @srt_tabs_fixture.to_srt
             end
             
             
+       end
+       
+       describe 'bug timestamps' do
+         before(:each) do
+           @bug_timestamps=Subtitle.new(dump: bug_timestamps, format: 'srt')        
+          end
+           it 'should parse the file and have proper timestamps' do
+     #                puts "some ugly debug:#{@empty_lines.lines.inspect}"
+              expect(@bug_timestamps.lines).to be_instance_of(Array)
+              line=@bug_timestamps.lines[0]
+              #puts "time on: #{line.time_on.to_s(',')}"
+              #puts "time off: #{line.time_off.to_s(',')}"
+              #puts "text: #{line.text}"
+              expect(line.time_on.to_s(',')).to eq("00:02:35,046")
+              
+              #puts @bug_timestamps.to_srt
+              
+            end
        end
   
   

@@ -37,7 +37,7 @@ module Formats
 
         text = line.join('|')
         # if text.nil?        
-         # @logger.debug("2. parse_srt time_on:#{time_on} time_off:#{time_off} text:#{text}")              
+     #    @logger.debug("2. parse_srt time_on:#{time_on} time_off:#{time_off} text:#{text}")              
         # end
         final << SubtitleIt::Subline.new(time_on, time_off, text) unless final.nil?
       else

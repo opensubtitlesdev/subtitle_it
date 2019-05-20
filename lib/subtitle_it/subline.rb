@@ -22,8 +22,9 @@ module SubtitleIt
         # need to add seconds on time_off to time_on
         @time_off += @time_on if @time_off < @time_on
         @text = text
+        #@logger.debug("Subline with time_on:#{time_on} - time_off:#{time_off} text: #{text}")
       else
-      #  @logger.debug("Error Subline with time_on:#{time_on} - time_off:#{time_off} text: #{text}")
+        @logger.debug("Error Subline with time_on:#{time_on} - time_off:#{time_off} text: #{text}")
         @text=nil
       end
     end

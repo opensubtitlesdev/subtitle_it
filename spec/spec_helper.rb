@@ -20,6 +20,10 @@ module SubFixtures
       File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/1954457660'))
   end
   
+  def bug_timestamps
+     File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/bug_timestamps.srt'))
+  end
+  
   
   # has an empty string in 5th subtitle
   def bugged_srt_fixture

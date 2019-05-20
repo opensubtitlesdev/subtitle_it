@@ -142,7 +142,7 @@ module SubtitleIt
 
       
       enc = CharlockHolmes::EncodingDetector.detect(dump)
-      @logger.debug("\n...........\n encode_dump #{enc}")
+    #  @logger.debug("\n...........\n encode_dump #{enc}")
     
     #  if enc[:encoding] != 'UTF-8'
 #        puts "Converting `#{enc[:encoding]}` to `UTF-8`"
@@ -155,14 +155,14 @@ module SubtitleIt
     end
 
     def parse_dump(dump, format)
-      @logger.debug("\n...........\nParsing #{@filename}")
+    #  @logger.debug("\n...........\nParsing #{@filename}")
       fail unless SUB_EXTS.include?(format)
       dump = dos2unix dump
       content = encode_dump(dump)
 
       content=content.sub("\xEF\xBB\xBF".force_encoding("UTF-8"), '')      
       
-       @logger.debug("\n...........\n content\n#{content}")
+      # @logger.debug("\n...........\n content\n#{content}")
       @raw=fix_empty_lines(content)
     #  @raw=content
       @format = format
