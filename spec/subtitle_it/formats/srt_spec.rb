@@ -74,7 +74,21 @@ describe Formats, '.srt' do
             expect(@not_sure_if_problem.lines.length).to eq(778)
          end
     end
-    
+    describe 'doubled timestamp' do
+      before(:each) do
+        @double_timestamp=Subtitle.new(dump: double_timestamp, format: 'srt')
+        @raw_content=double_timestamp.read.split("\n")
+       end
+       it 'should parse the file ndouble_timestamp' do
+                 puts "some ugly debug:#{@raw_content.inspect}"
+                 puts "some more :#{@double_timestamp.to_srt}"
+          expect(@double_timestamp.lines).to be_instance_of(Array)
+        end
+    #    it 'should fix problem with file double_timestamp' do
+    #       expect(@double_timestamp.lines.length).to eq(2)
+    #    end
+   end
+   
     
      describe 'should parse' do
          before(:each) do
@@ -89,6 +103,24 @@ describe Formats, '.srt' do
           #   expect(@should_parse.lines.length).to eq(778)
           #end
       end
+       describe 'should parse 2019' do
+           before(:each) do
+             @should_parse=Subtitle.new(dump: should_parse_2019, format: 'srt')
+            # @raw_content=bugged_empty_lines.read.split("\n")
+            end
+            it 'should parse the should_parse' do
+              
+                                  # puts "some ugly debug:#{@should_parse.lines.inspect}"
+                     puts "some ugly debug:#{@should_parse.lines.inspect}"
+                     puts @should_parse.to_srt
+               expect(@should_parse.lines).to be_instance_of(Array)
+             end
+            #it 'should fix problem with should_parse' do
+            #   expect(@should_parse.lines.length).to eq(778)
+            #end
+        end
+      
+      
      describe 'parse arabic problem' do
          before(:each) do
            @parse_arabic=Subtitle.new(dump: parse_arabic, format: 'srt')
@@ -116,7 +148,7 @@ describe Formats, '.srt' do
             expect(@problem_many_empty_lines.lines).to be_instance_of(Array)
           end
           it 'should fix problem with many empty lines' do
-             expect(@problem_many_empty_lines.lines.length).to eq(7)
+             expect(@problem_many_empty_lines.lines.length).to eq(8)
           end
      end
   

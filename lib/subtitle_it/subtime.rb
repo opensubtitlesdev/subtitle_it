@@ -17,14 +17,14 @@ module SubtitleIt
 
       case data
       when Numeric
-     #    @logger.debug("parse_data data: #{data} Numeric")
+        @logger.debug("parse_data data: #{data} Numeric")
         @sec, @ms  = data.divmod(1000)
         @min, @sec = @sec.divmod(60)
         @hrs, @min = @min.divmod(60)
 
         @use_ms_str = false
       when String
-         #        @logger.debug("parse_data data: #{data} String")
+         @logger.debug("parse_data data: #{data} String")
         time, float = data.split(/\.|\,/)
         time = time.split(/:/).map(&:to_i)
         if float
@@ -39,7 +39,7 @@ module SubtitleIt
         
      #   @ms_str = float if float
         
-      #  @logger.debug("parse_data float: #{float}  @ms:#{ @ms}")
+    #    @logger.debug("parse_data float: #{float}  @ms:#{ @ms}")
         @sec, @min, @hrs = time.reverse
       else fail 'Format unknown.'
       end

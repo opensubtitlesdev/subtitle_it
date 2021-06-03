@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'nokogiri'
   s.add_dependency 'charlock_holmes'
   s.add_dependency 'logging'  
+  s.add_dependency 'xmlrpc'
 
   
 end

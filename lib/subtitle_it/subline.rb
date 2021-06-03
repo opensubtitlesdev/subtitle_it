@@ -20,11 +20,18 @@ module SubtitleIt
         @time_on, @time_off = filter(time_on, time_off)
         # ugly FIXME: when pseudo uses time => 3 or TT format
         # need to add seconds on time_off to time_on
-        @time_off += @time_on if @time_off < @time_on
+     #   @time_off += @time_on if @time_off < @time_on
+
+        @timeoni=@time_on.to_s.gsub(":","").gsub(",","").gsub(".","").to_i
+        @timeoffi=@time_off.to_s.gsub(":","").gsub(",","").gsub(".","").to_i
+
+        @time_off += @time_on if @timeoffi < @timeoni
+
+
         @text = text
-        #@logger.debug("Subline with time_on:#{time_on} - time_off:#{time_off} text: #{text}")
+   #     @logger.debug("Subline with time_on:#{time_on} - time_off:#{time_off} -- time_off < time_on ? #{@time_off < @time_on} text: #{text}  @timeoni=#{@timeoni}")
       else
-        @logger.debug("Error Subline with time_on:#{time_on} - time_off:#{time_off} text: #{text}")
+ #       @logger.debug("Error Subline with time_on:#{time_on} - time_off:#{time_off} text: #{text}")
         @text=nil
       end
     end

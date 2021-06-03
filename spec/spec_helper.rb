@@ -23,8 +23,9 @@ module SubFixtures
   def bug_timestamps
      File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/bug_timestamps.srt'))
   end
-  
-  
+  def double_timestamp
+    File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/double_timestamp.srt'))
+  end
   # has an empty string in 5th subtitle
   def bugged_srt_fixture
     File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/godfather_bugged.srt'))
@@ -36,6 +37,13 @@ module SubFixtures
   def should_parse
      File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/should_parse.srt'))    
    end
+   
+   def should_parse_2019
+      File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/bug_wtf2019.srt'))    
+    end
+   
+   
+   
   def not_sure_if_problem
     File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/not_sure_if_problem.srt'))    
   end
