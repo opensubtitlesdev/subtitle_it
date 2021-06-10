@@ -21,31 +21,31 @@ module Formats
     @logger.level = :debug
     # @logger.add_appenders \
     #     Logging.appenders.file('srt_logger.log')
-    #@logger.debug("DEBUG parse_srt 00.  @raw:\n#{@raw}\n.......................")      
+    #@logger.debug("DEBUG parse_srt 00.  @raw:\n#{@raw}\n.......................")
    # puts "DEBUG parse_srt 00.  @raw:\n#{@raw}\n......................."
   #  @raw=fix_srt_empty_lines(@raw)
-  #  @logger.debug("DEBUG parse_srt 01.  formatted:\n#{@raw}\n.......................")          
+  #  @logger.debug("DEBUG parse_srt 01.  formatted:\n#{@raw}\n.......................")
     @raw.split(endl * 2).inject([]) do |final, line|
 
 
-      @logger.debug("1. parse_srt line:#{line.inspect}")      
+  #    @logger.debug("1. parse_srt line:#{line.inspect}")
       line = line.split(endl)
       line.delete_at(0)
-      @logger.debug("2. parse_srt line[0]:#{line[0]}")      
+  #    @logger.debug("2. parse_srt line[0]:#{line[0]}")
       unless line[0].nil?
         txtline=line[0].gsub(": ",":")
-         @logger.debug("3. parse_srt txtline:#{txtline}")      
+      #   @logger.debug("3. parse_srt txtline:#{txtline}")
         time_on, time_off = txtline.split('-->').map(&:strip)
         line.delete_at(0)
 
         text = line.join('|')
-        # if text.nil?        
-         #puts("2. parse_srt time_on:#{time_on} time_off:#{time_off} text:#{text}")          
+        # if text.nil?
+         #puts("2. parse_srt time_on:#{time_on} time_off:#{time_off} text:#{text}")
 
         # end
         final << SubtitleIt::Subline.new(time_on, time_off, text) unless final.nil?
       else
-      #  @logger.debug("SHIT IS HERE parse_srt line:#{line.inspect}")      
+      #  @logger.debug("SHIT IS HERE parse_srt line:#{line.inspect}")
       end
     end
   end
@@ -55,7 +55,7 @@ module Formats
 
     out = []
     @lines.each_with_index do |l, i|
-     # @logger.debug("to_srt >>> to_srt time on:#{l.time_on} time off:#{l.time_off} i:#{i}")      
+     # @logger.debug("to_srt >>> to_srt time on:#{l.time_on} time off:#{l.time_off} i:#{i}")
       unless l.time_on.nil? && l.time_off.nil?
         out << "#{i + 1}"
         out << '%s --> %s' % [l.time_on.to_s(','), l.time_off.to_s(',')]
@@ -69,14 +69,14 @@ module Formats
 
 
   def fix_srt_empty_lines(content)
-#   content.gsub!(/(.*?\d\d:\d\d:\d\d[,\.]\d{3}\s+--\>\s+\d\d:\d\d:\d\d[,\.]\d{3}\s[\r\n]*.*?[\r\n]{2})(?:[\r\n]*\s*)+(.*)/, '\\1\\2')    
+#   content.gsub!(/(.*?\d\d:\d\d:\d\d[,\.]\d{3}\s+--\>\s+\d\d:\d\d:\d\d[,\.]\d{3}\s[\r\n]*.*?[\r\n]{2})(?:[\r\n]*\s*)+(.*)/, '\\1\\2')
 #   content=content.gsub(/(.*?\d\d:\d\d:\d\d[,\.]\d{3}\s+--\>\s+\d\d:\d\d:\d\d[,\.]\d{3}\s[\r\n]*.*?[\r\n]{2})(?:[\r\n]*\s*)+(.*)/, '\\1\\2').strip!
 
 
 
     #remove newlines after timestamp
     content.gsub!(/(.*?\d\d:\d\d:\d\d[,\.]\d{3}\s+--\>\s+\d\d:\d\d:\d\d[,\.]\d{3})\s*(.*)/, "\\1\r\n\\2")
-  
+
     #remove newlines in text
     content.gsub!(/(.*?\d\d:\d\d:\d\d[,\.]\d{3}\s+--\>\s+\d\d:\d\d:\d\d[,\.]\d{3}\s*.*? *\r?\n *\r?\n)(?:\s*)(.*)/, "\\1\\2").strip!
 
@@ -91,9 +91,9 @@ module Formats
     #    break
     #  end
     # end
-    # arcontent.reverse!                   
+    # arcontent.reverse!
     #
-   
+
 
     arcontent.each_with_index do |line,i|
       pattern = (/\d{2}:\d{2}:\d{2},\d{3}?.*/)

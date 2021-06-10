@@ -1,3 +1,3 @@
 module SubtitleIt
-  VERSION = '2.0.65'
+  VERSION = '2.0.66'
 end
