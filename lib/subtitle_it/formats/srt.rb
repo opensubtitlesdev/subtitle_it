@@ -25,17 +25,17 @@ module Formats
    # puts "DEBUG parse_srt 00.  @raw:\n#{@raw}\n......................."
    # @raw=fix_srt_empty_lines_s(@raw)
     @frmted = fix_srt_empty_lines_gpt(@raw)
-    @logger.debug("DEBUG parse_srt 01.  formatted:\n#{@raw}\n.......................\n#{@frmted }")
+  #  @logger.debug("DEBUG parse_srt 01.  formatted:\n#{@raw}\n.......................\n#{@frmted }")
     @frmted.split(endl * 2).inject([]) do |final, line|
 
 
-      @logger.debug("1. parse_srt line:#{line.inspect}")
+    #  @logger.debug("1. parse_srt line:#{line.inspect}")
       line = line.split(endl)
       line.delete_at(0)
-      @logger.debug("2. parse_srt line[0]:#{line[0]}")
+   #   @logger.debug("2. parse_srt line[0]:#{line[0]}")
       unless line[0].nil?
         txtline=line[0].gsub(": ",":")
-         @logger.debug("3. parse_srt txtline:#{txtline}")
+       #  @logger.debug("3. parse_srt txtline:#{txtline}")
         time_on, time_off = txtline.split('-->').map(&:strip)
         line.delete_at(0)
 
