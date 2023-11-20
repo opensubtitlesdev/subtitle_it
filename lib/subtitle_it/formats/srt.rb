@@ -23,18 +23,19 @@ module Formats
     #     Logging.appenders.file('srt_logger.log')
     #@logger.debug("DEBUG parse_srt 00.  @raw:\n#{@raw}\n.......................")
    # puts "DEBUG parse_srt 00.  @raw:\n#{@raw}\n......................."
-  #  @raw=fix_srt_empty_lines(@raw)
-  #  @logger.debug("DEBUG parse_srt 01.  formatted:\n#{@raw}\n.......................")
-    @raw.split(endl * 2).inject([]) do |final, line|
+   # @raw=fix_srt_empty_lines_s(@raw)
+    @frmted = fix_srt_empty_lines_gpt(@raw)
+    @logger.debug("DEBUG parse_srt 01.  formatted:\n#{@raw}\n.......................\n#{@frmted }")
+    @frmted.split(endl * 2).inject([]) do |final, line|
 
 
-  #    @logger.debug("1. parse_srt line:#{line.inspect}")
+      @logger.debug("1. parse_srt line:#{line.inspect}")
       line = line.split(endl)
       line.delete_at(0)
-  #    @logger.debug("2. parse_srt line[0]:#{line[0]}")
+      @logger.debug("2. parse_srt line[0]:#{line[0]}")
       unless line[0].nil?
         txtline=line[0].gsub(": ",":")
-      #   @logger.debug("3. parse_srt txtline:#{txtline}")
+         @logger.debug("3. parse_srt txtline:#{txtline}")
         time_on, time_off = txtline.split('-->').map(&:strip)
         line.delete_at(0)
 
@@ -45,7 +46,7 @@ module Formats
         # end
         final << SubtitleIt::Subline.new(time_on, time_off, text) unless final.nil?
       else
-      #  @logger.debug("SHIT IS HERE parse_srt line:#{line.inspect}")
+        @logger.debug("SHIT IS HERE parse_srt line:#{line.inspect}")
       end
     end
   end
@@ -67,6 +68,66 @@ module Formats
     out.join(endl)
   end
 
+  def fix_srt_empty_lines_gpt(content)
+   # puts "\n............\norig:\n"+content
+    lines = content.split("\n")
+
+  # Iterate through the lines and replace lines with only whitespace after a number and before a timestamp with "...\n"
+  # and remove lines with only whitespace after a timestamp and before a subtitle
+  processed_lines = lines.each_with_index.map do |line, index|
+    if index > 0 && index < lines.length - 1 && lines[index - 1].include?(" --> ") && line =~ /^\s*$/
+      if lines[index + 1].match(/^\d+$/)
+        "...\n"
+      elsif lines[index + 1] !~ /^\s*$/ && lines[index + 1] !~ / --> /
+        nil
+      else
+        line
+      end
+    else
+      line
+    end
+  end.compact
+    processed_s = processed_lines.join("\n")
+  #  puts "\n............\nprocessed:\n"+ processed_s 
+    processed_s
+    
+  end
+
+
+
+  
+
+  def fix_srt_empty_lines_s(content)
+   # content.gsub!(/(.*?\d\d:\d\d:\d\d[,\.]\d{3}\s+--\>\s+\d\d:\d\d:\d\d[,\.]\d{3})\s*(.*)/, "\\1\r\n\\2")
+    #content.gsub!(/(.*?\d\d:\d\d:\d\d[,\.]\d{3}\s+--\>\s+\d\d:\d\d:\d\d[,\.]\d{3}\s*.*? *\r?\n *\r?\n)(?:\s*)(.*)/, "\\1\\2").strip!
+    el=endline(content)
+    arcontent=content.split(el)
+    #arcontent.reverse!
+    #arcontent.each_with_index do |ar,i|
+    #  if ar.blank? || ar=="\n"
+    #    arcontent.delete_at(i)
+    #  else
+    #    break
+    #  end
+    # end
+    # arcontent.reverse!
+    #
+
+
+    arcontent.each_with_index do |line,i|
+      pattern = (/\d{2}:\d{2}:\d{2},\d{3}?.*/)
+      if line.match(pattern)
+        #  puts "matching at line #{i}, content: >#{line}<"
+        if arcontent[i+1] && arcontent[i+1].blank?
+          #  puts "text content for line #{i} is empty, replace by space  => >#{arcontent[i+1]}<"
+          # arcontent[i+1]=":..:"
+          arcontent[i+1]="   "
+        end
+      end
+    end
+    newcontent=arcontent.join(endline(content))
+    return newcontent
+  end
 
   def fix_srt_empty_lines(content)
 #   content.gsub!(/(.*?\d\d:\d\d:\d\d[,\.]\d{3}\s+--\>\s+\d\d:\d\d:\d\d[,\.]\d{3}\s[\r\n]*.*?[\r\n]{2})(?:[\r\n]*\s*)+(.*)/, '\\1\\2')

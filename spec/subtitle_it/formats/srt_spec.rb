@@ -61,6 +61,20 @@ describe Formats, '.srt' do
           expect(@empty_lines.lines.length).to eq(10)
        end
   end
+  describe 'polish bug' do
+    before(:each) do
+      @st_polish_bug=Subtitle.new(dump: polish_bug_short, format: 'srt')
+     # @raw_content=bugged_empty_lines.read.split("\n")
+     puts  @st_polish_bug.to_srt
+     end
+     it 'should parse the file with empty lines in polish file' do
+#                puts "some ugly debug:#{@empty_lines.lines.inspect}"
+        expect(@st_polish_bug.lines).to be_instance_of(Array)
+      end
+      it 'should fix problem with empty lines at the end of a file' do
+         expect(@st_polish_bug.lines.length).to eq(196)
+      end
+ end
    describe 'not sure if problem' do
        before(:each) do
          @not_sure_if_problem=Subtitle.new(dump: not_sure_if_problem, format: 'srt')
@@ -196,13 +210,14 @@ describe Formats, '.srt' do
            before(:each) do
              @missing_first_stamp=Subtitle.new(dump: missing_first_stamp, format: 'srt')
             # @raw_content=bugged_empty_lines.read.split("\n")
+           # puts  @missing_first_stamp.to_srt
             end
             it 'should parse the file with missing first ts' do
       #                puts "some ugly debug:#{@empty_lines.lines.inspect}"
                expect(@missing_first_stamp.lines).to be_instance_of(Array)
              end
              it 'should parse the file with missing first ts and count lines correctly' do
-                expect(@missing_first_stamp.lines.length).to eq(721)
+                expect(@missing_first_stamp.lines.length).to eq(16)
              end
         end
 

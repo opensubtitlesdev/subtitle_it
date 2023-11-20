@@ -14,6 +14,13 @@ module SubFixtures
   def srt_fixture
     File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/godfather.srt'))
   end
+  def polish_bug
+    File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/mywtfsub.srt'))
+  end
+  def polish_bug_short
+    File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/mywtfsub_short.srt'))
+  end
+  
   
   def srt_tabs_fixture
 #    File.open(File.expand_path(File.dirname(__FILE__) + '/fixtures/srt_tabs.srt'))

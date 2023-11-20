@@ -1,37 +1,37 @@
 1
 00:00:00,040 --> 00:00:20,040
 Postsynchron  <<<Schemadan>>> na film
-kinorip I, Robot 25.00 576x260 (i s úvodní znìlkou)
+kinorip I, Robot 25.00 576x260 (i s ï¿½vodnï¿½ znï¿½lkou)
 
 2
 00:00:48,440 --> 00:00:55,160
-Já, Robot.
+Jï¿½, Robot.
 
 3
 00:01:03,040 --> 00:01:11,480
-1. zákon
-Robot nesmí zranit èlovìka, anebo mu dovolit aby se zranil.
+1. zï¿½kon
+Robot nesmï¿½ zranit ï¿½lovï¿½ka, anebo mu dovolit aby se zranil.
 
 4
 00:01:15,000 --> 00:01:21,640
-2. zákon
-Robot musí splnit pøíkazy dané èlovìkem, nemusí, když by byli v rozporu s 1. zákonem.
+2. zï¿½kon
+Robot musï¿½ splnit pï¿½ï¿½kazy danï¿½ ï¿½lovï¿½kem, nemusï¿½, kdyï¿½ by byli v rozporu s 1. zï¿½konem.
 
 5
 00:01:32,360 --> 00:01:40,200
-3. zákon
-Robot musí zabezpeèit svoji existenci až do chvíle konfliktu s 1. nebo 2. zákonem.
+3. zï¿½kon
+Robot musï¿½ zabezpeï¿½it svoji existenci aï¿½ do chvï¿½le konfliktu s 1. nebo 2. zï¿½konem.
 
 6
 00:03:14,560 --> 00:03:15,840
 
 7
 00:03:22,080 --> 00:03:27,000
-Dobré ráno pane, opìt donáška na èas od...
+Dobrï¿½ rï¿½no pane, opï¿½t donï¿½ka na ï¿½as od...
 
 8
 00:03:27,200 --> 00:03:29,200
-Jdi mi z oèí konzervo.
+Jdi mi z oï¿½ï¿½ konzervo.
 
 9
 00:03:29,960 --> 00:03:31,040
@@ -39,7 +39,7 @@ Nashledanou.
 
 10
 00:04:03,320 --> 00:04:04,840
-Jak myslíte pane.
+Jak myslï¿½te pane.
 
 
 
