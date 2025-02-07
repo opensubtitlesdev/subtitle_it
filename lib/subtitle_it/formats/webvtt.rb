@@ -16,13 +16,22 @@ module Formats
   end
 
   def parse_webvtt
-    @raw.split(endl * 2).inject([]) do |final, line|
+    @frmted = fix_vtt_empty_lines_gpt(@raw)
+    @frmted.split(endl * 2).inject([]) do |final, line|
       line = line.split(endl)
       line.delete_at(0)
-      time_on, time_off = line[0].split('-->').map(&:strip)
-      line.delete_at(0)
-      text = line.join('|')
-      final << SubtitleIt::Subline.new(time_on, time_off, text)
+      unless line[0].nil?
+        txtline = line[0].gsub(": ", ":")
+        #  @logger.debug("3. parse_srt txtline:#{txtline}")
+        time_on, time_off = txtline.split("-->").map(&:strip)
+        line.delete_at(0)
+
+        text = line.join("|")
+        time_on, time_off = line[0].split("-->").map(&:strip)
+        line.delete_at(0)
+        text = line.join("|")
+        final << SubtitleIt::Subline.new(time_on, time_off, text)
+      end
     end
   end
 
@@ -32,19 +41,43 @@ module Formats
       unless l.blank?
         out << "#{i + 1}"
         #out << '%s --> %s' % [l.time_on.to_s(','), l.time_off.to_s(',')]
-        out << '%s --> %s' % [l.time_on.to_s, l.time_off.to_s]
-        out << (l.text ? l.text.gsub('|', endl) : ' ') + endl
+        out << "%s --> %s" % [l.time_on.to_s, l.time_off.to_s]
+        out << (l.text ? l.text.gsub("|", endl) : " ") + endl
       end
     end
-    srt=out.join(endl)
-    
+    srt = out.join(endl)
+
     # convert timestamps and save the file
     srt.gsub!(/([0-9]{2}:[0-9]{2}:[0-9]{2})([,])([0-9]{3})/, '\1.\3')
     # normalize new line character
     srt.gsub!("\r\n", "\n")
-    
+
     srt = "WEBVTT\n\n#{srt}".strip
     return srt
+  end
+
+  def fix_vtt_empty_lines_gpt(content)
+    # puts "\n............\norig:\n"+content
+    lines = content.split("\n")
+
+    # Iterate through the lines and replace lines with only whitespace after a number and before a timestamp with "...\n"
+    # and remove lines with only whitespace after a timestamp and before a subtitle
+    processed_lines = lines.each_with_index.map do |line, index|
+      if index > 0 && index < lines.length - 1 && lines[index - 1].include?(" --> ") && line =~ /^\s*$/
+        if lines[index + 1].match(/^\d+$/)
+          "...\n"
+        elsif lines[index + 1] !~ /^\s*$/ && lines[index + 1] !~ / --> /
+          nil
+        else
+          line
+        end
+      else
+        line
+      end
+    end.compact
+    processed_s = processed_lines.join("\n")
+    #  puts "\n............\nprocessed:\n"+ processed_s
+    processed_s
   end
 end
 
